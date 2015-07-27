@@ -1,0 +1,16 @@
+{%extends 'notes/base.html'%}
+{%load staticfiles%}
+
+{%block content%}
+    <h3>Folder</h3>
+    <link rel="stylesheet" type="text/css" href="{% static 'notes/style.css' %}" />
+    {% if object_list  %}
+        <ul>
+        {% for folder in object_list  %}
+            <li>{{folder.title}}</li>
+        {% endfor %}
+        </ul>
+    {% else %}
+        <p>No folders are available.</p>
+    {% endif %}
+{%endblock%}

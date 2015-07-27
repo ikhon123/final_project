@@ -3,7 +3,9 @@
 
 {%block content%}
     <link rel="stylesheet" type="text/css" href="{% static 'notes/style.css' %}" />
-    <h2>Total number of notes: {{total}}</h2>
+    {%if total%}
+        <h2>Total number of notes: {{total}}</h2>
+    {%endif%}
     {% if object_list  %}
         {% for note in object_list  %}
             <a href={%url 'note_update' note.id %}>

@@ -1,0 +1,16 @@
+{%extends 'notes/base.html'%}
+{%load staticfiles%}
+
+{%block content%}
+    <h3>Tags</h3>
+    <link rel="stylesheet" type="text/css" href="{% static 'notes/style.css' %}" />
+    {% if object_list  %}
+        <ul>
+        {% for tag in object_list  %}
+            <li>{{tag.title}}</li>
+        {% endfor %}
+        </ul>
+    {% else %}
+        <p>No tag are available.</p>
+    {% endif %}
+{%endblock%}

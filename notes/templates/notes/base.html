@@ -18,8 +18,150 @@
 <link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
 <script type="text/javascript">
     $(document).ready(function() {
-      $('.dateinput').datepicker({ format: "yyyy/mm/dd" });
-      $('.datetimeinput').datetimepicker({format: "YYYY-MM-DD HH:mm"});
+        jQuery.ajaxSettings.traditional = true; //Important 
+        
+        /*Important functions to enable CSRF token as Django requires it*/
+        function getCookie(name) {
+            var cookieValue = null;
+            var i = 0;
+            if (document.cookie && document.cookie !== '') {
+                var cookies = document.cookie.split(';');
+                for (i; i < cookies.length; i++) {
+                    var cookie = jQuery.trim(cookies[i]);
+                    // Does this cookie string begin with the name we want?
+                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+        var csrftoken = getCookie('csrftoken');
+    
+        function csrfSafeMethod(method) {
+            // these HTTP methods do not require CSRF protection
+            return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+        }
+        /*end CSRF token */
+    
+        /*Setting the format of the datepicker and datetimepicker*/
+        $('.dateinput').datepicker({
+            format: "yyyy/mm/dd"
+        });
+        $('.datetimeinput').datetimepicker({
+            format: "YYYY-MM-DD HH:mm"
+        });
+    
+       
+        $('.createfolder').click(function(e) {
+            
+            formid = $(this).parent().attr("id"); //find the formid of the button pressed via parent 
+            
+            $.ajax({
+                type: "POST",
+                url: "/",
+                dataType: "json",
+                data: {
+                    "title": $("#" + formid + " #id_title").val(),
+                    "color": $("#" + formid + " #id_color").val(),
+                    "fontcolor": $("#" + formid + " #id_fontcolor").val(),
+                    "form": $("#" + formid).serialize(),
+    
+                },
+                success: function(data, status) {
+                    //Populate the dropdown list with all the folders returned in json
+                    var $el = $("#id_folder");
+                    $el.empty(); // remove old options
+                    $el.append($("<option></option>").attr("value", "").text("---------"));
+                    $.each(data, function(key, value) {
+                        $el.append($("<option></option>").attr("value", value.id).text(value.title));
+                    });
+                },
+                crossDomain: false, // obviates need for sameOrigin test
+                beforeSend: function(xhr, settings) {
+                    if (!csrfSafeMethod(settings.type)) {
+                        xhr.setRequestHeader("X-CSRFToken", csrftoken);
+                    }
+                }
+            });
+        });
+        
+        $('.createtag').click(function(e) {
+            formid = $(this).parent().attr("id"); //find the formid of the button pressed via parent 
+            
+            $.ajax({
+                type: "POST",
+                url: "/",
+                dataType: "json",
+                data: {
+                    "title": $("#" + formid + " #id_title").val(),
+                    "color": $("#" + formid + " #id_color").val(),
+                    "fontcolor": $("#" + formid + " #id_fontcolor").val(),
+                    "form": $("#" + formid).serialize(),
+    
+                },
+                success: function(data, status) {
+                    //Populate the dropdown list with all the folders returned in json
+                    var $el = $("#id_tag");
+                    $el.empty(); // remove old options
+                    $.each(data, function(key, value) {
+                        $el.append($("<option></option>").attr("value", value.id).text(value.title));
+                    });
+                },
+                crossDomain: false, // obviates need for sameOrigin test
+                beforeSend: function(xhr, settings) {
+                    if (!csrfSafeMethod(settings.type)) {
+                        xhr.setRequestHeader("X-CSRFToken", csrftoken);
+                    }
+                }
+            });
+        });
+        
+        $('.btn.createnote').click(function(e) {
+            
+            formid = $(this).parent().attr("id"); //find the formid of the button pressed via parent 
+    
+            $.ajax({
+                type: "POST",
+                url: "/",
+                dataType: "json",
+                data: {
+                     "title": $("#" + formid + " #id_title").val(),
+                     "done": $("#" + formid + " #id_done").prop("checked"),
+                     "content": $("#" + formid + " #id_content").val(),
+                     "due": $("#" + formid + " #id_due").val(),
+                     "color": $("#" + formid + " #id_color").val(),
+                     "fontcolor": $("#" + formid + " #id_fontcolor").val(),
+                     "folder": $("#" + formid + " #id_folder").val(),
+                     "tag": $("#" + formid + " #id_tag").val(),                
+                     "form": $("#" + formid).serialize(),
+    
+                },
+                success: function(data) {
+                    if (data.status == 1){
+                        //alert(data.message)
+                        //http://stackoverflow.com/questions/503093/how-can-i-make-a-redirect-page-using-jquery
+                        window.location.replace("/list") //to redirect to another page
+                    }
+                },
+                crossDomain: false, // obviates need for sameOrigin test
+                beforeSend: function(xhr, settings) {
+                    if (!csrfSafeMethod(settings.type)) {
+                        xhr.setRequestHeader("X-CSRFToken", csrftoken);
+                    }
+                }
+            });
+        });
+        
+        /* To reset the modal input fields when modal is closed.*/
+        $('#myModal').on('hidden.bs.modal', function(){
+            $(this).find('form')[0].reset();
+        });
+        /* To reset the modal input fields when modal is closed.*/
+        $('#myModal2').on('hidden.bs.modal', function(){
+            $(this).find('form')[0].reset();
+        });
     });
 </script>
 </head>
