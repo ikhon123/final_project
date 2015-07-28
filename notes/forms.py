@@ -25,6 +25,7 @@ class NoteForm(forms.ModelForm):
         
         self.helper.layout.append(Button('btn_createnote', 'Create Note', css_class='createnote', style="margin-top:15px;"))
         self.helper.layout.append(Hidden(name='btn_createnote', value="btn_createnote"))
+        #self.helper.add_input(Submit('submit', 'Create Note'))
         
     def full_clean(self):#http://stackoverflow.com/questions/4340287/override-data-validation-on-one-django-form-element
         super(NoteForm, self).full_clean()
