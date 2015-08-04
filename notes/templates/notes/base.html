@@ -1,3 +1,4 @@
+
 {# Load the tag library #}
 {% load bootstrap3 %}
 
@@ -16,6 +17,15 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.14.30/js/bootstrap-datetimepicker.min.js"></script>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.14.30/css/bootstrap-datetimepicker.min.css">
 <link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
+<script type="text/css">
+.mynavbar {
+    display:block;
+    margin:0px;
+    padding:0px;
+    height:50px;
+}
+
+</script>
 <script type="text/javascript">
     $(document).ready(function() {
         jQuery.ajaxSettings.traditional = true; //Important 
@@ -134,7 +144,7 @@
                      "color": $("#" + formid + " #id_color").val(),
                      "fontcolor": $("#" + formid + " #id_fontcolor").val(),
                      "folder": $("#" + formid + " #id_folder").val(),
-                     "tag": $("#" + formid + " #id_tag").val(),                
+                     "tag": $("#" + formid + " #id_tag").val(),
                      "form": $("#" + formid).serialize(),
     
                 },
@@ -166,6 +176,35 @@
 </script>
 </head>
 <body>
+<div class="mynavbar">
+        <ul class="nav nav-tabs navbar-right">
+              <li role="presentation" class="dropdown">
+                <a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="true">
+                  {%if user.is_authenticated%}
+                      <img src="/media/{{curruser.picture}}" height="30px" %} />
+                      Hi {{user.username}}!
+                  {%else%}
+                      Login here!
+                  {%endif%}
+                  
+                  <span class="caret"></span>
+                </a>
+                <ul class="dropdown-menu">
+                  {%if user.is_authenticated%}
+                      <li><a href="/accounts/logout">Logout</a></li>
+                      <li><a href="/add">Add a new note</a></li>
+                      <li><a href="/list">View all my notes</a></li>
+                  {%else%}
+                      <li><a href="/accounts/login">Login</a></li>
+                  {%endif%}
+                
+                      
+                </ul>
+              </li>
+            </ul>
+        <!--</div>-->
+    <!--</div>-->
+</div>
 {%block content%}
 
 {%endblock%}

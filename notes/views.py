@@ -7,47 +7,75 @@ from django.core.urlresolvers import reverse, reverse_lazy
 from django.db.models import Q
 from django.views.generic import DetailView, ListView, TemplateView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
-from django.contrib.auth.decorators import login_required
-from django.utils.decorators import method_decorator
 from django.shortcuts import get_object_or_404, redirect
 from .forms import NoteForm, FolderForm, TagForm, NoteFormUpdate
 from .models import Note, Folder, Tag
 from django.http import JsonResponse
 from django.forms.models import model_to_dict
 from django.core.serializers.json import DjangoJSONEncoder
- 
-#from django.views.decorators.csrf import ensure_csrf_cookie
+from accounts.models import UserProfile
 
-class NoteList(ListView): #https://docs.djangoproject.com/en/1.7/topics/class-based-views/generic-display/
+from django.contrib.auth.decorators import login_required
+from django.utils.decorators import method_decorator
+
+
+class NoteList(ListView): 
     model = Note
     queryset = Note.objects.all()
 
+    @method_decorator(login_required)
+    def dispatch(self, *args, **kwargs):
+        return super(NoteList, self).dispatch(*args, **kwargs)
+    
     def get_queryset(self):
+        #self.request.user will contain the "User" object, however,
+        #user field in the Note model is an instance of "UserProfile" object
+        #So need to ensure that when we filter all the user owned notes, we
+        #filter using the 'correct' UserProfile instance based on logged in "User" object 
+        #in self.request.user
+        curruser = UserProfile.objects.get(user=self.request.user)
         folder = self.kwargs['folder']
         if folder == '':
-            self.queryset = Note.objects.all()
+            #filter based on current logged in user
+            self.queryset = Note.objects.filter(user=curruser)
             return self.queryset
         else:
-            self.queryset = Note.objects.filter(folder__title__iexact=folder)
+            #filter based on current logged in user
+            self.queryset = Note.objects.all().filter(user=curruser).filter(folder__title__iexact=folder)
             return self.queryset
     
     
     def get_context_data(self, **kwargs):
         context = super(NoteList, self).get_context_data(**kwargs)
         context['total'] = self.queryset.count()
+        #provided so that the avatar can be displayed in base.html
+        context['curruser'] = UserProfile.objects.get(user=self.request.user)
         return context
 
 class NoteDetail(DetailView):
     model = Note
-
-# class NoteCreate(CreateView):
-#     model = Note
-#     form_class = NoteForm
-
+    
+    @method_decorator(login_required)
+    def dispatch(self, *args, **kwargs):
+        return super(NoteDetail, self).dispatch(*args, **kwargs)
+        
+    def get_context_data(self, **kwargs):
+        context = super(NoteDetail, self).get_context_data(**kwargs)
+        context['curruser'] = UserProfile.objects.get(user=self.request.user)
+        return context
 
 class NoteUpdate(UpdateView):
     model = Note
     form_class = NoteFormUpdate
+    
+    @method_decorator(login_required)
+    def dispatch(self, *args, **kwargs):
+        return super(NoteUpdate, self).dispatch(*args, **kwargs)
+        
+    def get_context_data(self, **kwargs):
+        context = super(NoteUpdate, self).get_context_data(**kwargs)
+        context['curruser'] = UserProfile.objects.get(user=self.request.user)
+        return context
     
 class NoteByTag(ListView):
     model = Note
@@ -64,13 +92,15 @@ class NoteByTag(ListView):
         for item in queries:
             query |= item
         # Query the model
-        allnotes = Note.objects.filter(query).distinct().order_by('tag__title')
+        curruser = UserProfile.objects.filter(user=self.request.user) #only query notes by curruser
+        allnotes = Note.objects.filter(user=curruser).filter(query).distinct().order_by('tag__title')
         self.queryset = allnotes #Setting the queryset to allow get_context_data to apply count
         return allnotes
     
     def get_context_data(self, **kwargs):
         context = super(NoteByTag, self).get_context_data(**kwargs)
         context['total'] = self.queryset.count()
+        context['curruser'] = UserProfile.objects.get(user=self.request.user)
         return context
 
 
@@ -80,10 +110,16 @@ class MyView(TemplateView):
     note_form_class = NoteForm
     template_name = "notes/note_hybrid.html"
 
+    @method_decorator(login_required)
+    def dispatch(self, *args, **kwargs):
+        return super(MyView, self).dispatch(*args, **kwargs)
+        
     def get(self, request, *args, **kwargs):
         kwargs.setdefault("createfolder_form", self.folder_form_class())
         kwargs.setdefault("createtag_form", self.tag_form_class())
         kwargs.setdefault("createnote_form", self.note_form_class())
+        #Added curruser so that profile picture of curruser can be rendered.
+        kwargs.setdefault('curruser', UserProfile.objects.get(user=self.request.user))
         return super(MyView, self).get(request, *args, **kwargs)
     
     def post(self, request, *args, **kwargs):
@@ -118,9 +154,14 @@ class MyView(TemplateView):
                                    createnote_form=form) 
             else:
                 try:
-                    obj = form.save() #save the new object
+                    #Find out which user is logged in and get the correct UserProfile record.
+                    curruser = UserProfile.objects.get(user=self.request.user)
+                    obj = form.save(commit=False)
+                    obj.user = curruser #Save the note note under that user
+                    obj.save() #save the new object
+                    
                 except Exception, e:
-                    print("errors" + e)
+                    print("errors" + str(e))
                 response = {'status': 1, 'message':'ok'}
                 return HttpResponse(json.dumps(response, cls=DjangoJSONEncoder)) #return to ajax as success with all the new records.
             
@@ -129,4 +170,17 @@ class MyView(TemplateView):
 
 class NoteDelete(DeleteView):
     model = Note
-    success_url = reverse_lazy('listall')
+    success_url = '/list/'
+    
+    @method_decorator(login_required)
+    def dispatch(self, *args, **kwargs):
+        return super(NoteDelete, self).dispatch(*args, **kwargs)
+        
+    def get_context_data(self, **kwargs):
+        context = super(NoteDelete, self).get_context_data(**kwargs)
+        context['curruser'] = UserProfile.objects.get(user=self.request.user)
+        return context
+    
+class Landing(TemplateView):
+    template_name = "notes/landing.html"
+    

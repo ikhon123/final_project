@@ -2,6 +2,7 @@
 {%load staticfiles%}
 
 {%block content%}
+<div class="container">
     <link rel="stylesheet" type="text/css" href="{% static 'notes/style.css' %}" />
     {%if total%}
         <h2>Total number of notes: {{total}}</h2>
@@ -21,4 +22,5 @@
     {% else %}
         <p>No notes are available.</p>
     {% endif %}
+</div>
 {%endblock%}

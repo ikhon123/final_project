@@ -1,8 +1,10 @@
 from django.db import models
 from django.core.urlresolvers import reverse
+from accounts.models import UserProfile
 
 # Create your models here.
 class Note(models.Model):
+    user = models.ForeignKey(UserProfile, blank=True, null=True)
     title = models.CharField(max_length=255)
     content = models.TextField(blank=True) #not a required field
     due = models.DateTimeField(null=True, blank=True) #due datetime is optional

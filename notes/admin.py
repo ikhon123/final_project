@@ -1,5 +1,7 @@
 from django.contrib import admin
 from .models import Note, Folder, Tag
+from accounts.models import UserProfile
+
 # Register your models here.
 
 class NoteInline(admin.StackedInline): #Demo StackedInline vs TabularInline
@@ -26,3 +28,4 @@ class TagAdmin(admin.ModelAdmin):
 admin.site.register(Note)
 admin.site.register(Tag, TagAdmin)
 admin.site.register(Folder, FolderAdmin)
+admin.site.register(UserProfile)

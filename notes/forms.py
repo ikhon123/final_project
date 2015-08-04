@@ -6,7 +6,7 @@ from crispy_forms.layout import Submit, Layout, Hidden, Button, HTML, Div, Field
 class NoteForm(forms.ModelForm):
     class Meta: 
         model = Note
-        fields = '__all__'
+        fields = ('title','content','due','done','color','fontcolor','folder','tag')
         
     
     def __init__(self, *args, **kwargs):
@@ -25,6 +25,9 @@ class NoteForm(forms.ModelForm):
         
         self.helper.layout.append(Button('btn_createnote', 'Create Note', css_class='createnote', style="margin-top:15px;"))
         self.helper.layout.append(Hidden(name='btn_createnote', value="btn_createnote"))
+        
+        # self.helper.layout.pop(9)
+        #self.helper.layout.append(Hidden(name="user", value="4"))
         #self.helper.add_input(Submit('submit', 'Create Note'))
         
     def full_clean(self):#http://stackoverflow.com/questions/4340287/override-data-validation-on-one-django-form-element
@@ -37,7 +40,8 @@ class NoteForm(forms.ModelForm):
 class NoteFormUpdate(forms.ModelForm):
     class Meta: 
         model = Note
-        fields = '__all__'
+        #fields = '__all__'
+        exclude = ['user']
         
     def __init__(self, *args, **kwargs):
         super(NoteFormUpdate, self).__init__(*args, **kwargs)
