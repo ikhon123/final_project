@@ -138,8 +138,9 @@
                 dataType: "json",
                 data: {
                      "title": $("#" + formid + " #id_title").val(),
-                     "done": $("#" + formid + " #id_done").prop("checked"),
                      "content": $("#" + formid + " #id_content").val(),
+                     "deposit": $("#" + formid + " #id_deposit").val(),
+                     "contact": $("#" + formid + " #id_contact").val(),
                      "due": $("#" + formid + " #id_due").val(),
                      "color": $("#" + formid + " #id_color").val(),
                      "fontcolor": $("#" + formid + " #id_fontcolor").val(),
@@ -152,7 +153,7 @@
                     if (data.status == 1){
                         //alert(data.message)
                         //http://stackoverflow.com/questions/503093/how-can-i-make-a-redirect-page-using-jquery
-                        window.location.replace("/list") //to redirect to another page
+                        window.location.replace("/listall") //to redirect to another page
                     }
                 },
                 crossDomain: false, // obviates need for sameOrigin test

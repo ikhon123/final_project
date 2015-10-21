@@ -90,7 +90,7 @@ CRISPY_TEMPLATE_PACK = 'bootstrap3'
 
 #Authentication at the end of settings.py file
 LOGIN_URL = '/accounts/login' #URL to forward to when the page needs user to login
-LOGIN_REDIRECT_URL = '/list/' #Page to forward user after user login
+LOGIN_REDIRECT_URL = '/listall/' #Page to forward user after user login
 
 MEDIA_ROOT = os.path.join(BASE_DIR, "media","profile_images")
 MEDIA_URL = '/media/profile_images/'

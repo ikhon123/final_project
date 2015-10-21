@@ -1,18 +1,278 @@
-@import url(https://fonts.googleapis.com/css?family=Gloria+Hallelujah);
-* { box-sizing:border-box; }
-body { background:url(media/little_pluses.png) #cacaca; margin:30px; }
+/* -----------------------
+Base styles
+------------------------*/
 
-.postit  { 
-	display: block;
-	padding:25px 25px 40px;
-	margin:0 auto 20px auto;
-	width:250px;
-	height:auto; 
-	min-height:250px;
-	font:20px 'Gloria Hallelujah', cursive; 
+body
+{
+	margin: 0;
+	padding: 0;
+	color: white;
+	background-color: #eee;
+	font: 1em/1.2 "Helvetica Neue", Helvetica, Arial, Geneva, sans-serif;
+}
+
+h1,h2,h3,h4,h5,h6
+{
+	margin: 0 0 .5em;
+	font-weight: 500;
+	line-height: 1.1;
+}
+
+h1 { font-size: 2.25em; } /* 36px */
+h2 { font-size: 1.75em; } /* 28px */
+h3 { font-size: 1.375em;color:black; } /* 22px */
+h4 { font-size: 1.125em;color:black; } /* 18px */
+h5 { font-size: 1em; } /* 16px */
+h6 { font-size: .875em; } /* 14px */
+
+p
+{
+	margin: 0 0 1.5em;
+	line-height: 1.5;
+}
+
+blockquote
+{
+	padding: 1em 2em;
+	margin: 0 0 2em;
+	border-left: 5px solid #eee;
+}
+
+hr
+{
+	height: 0;
+	margin-top: 1em;
+	margin-bottom: 2em;
+	border: 0;
+	border-top: 1px solid #ddd;
+}
+
+table
+{
+	background-color: transparent;
+	border-spacing: 0;
+	border-collapse: collapse;
+	border-top: 1px solid #ddd;
+}
+
+th, td
+{
+	padding: .5em 1em;
+	vertical-align: top;
+	text-align: left;
+	border-bottom: 1px solid #ddd;
+}
+
+a:link { color: royalblue; }
+a:visited { color: purple; }
+a:focus { color: black; }
+a:hover { color: green; }
+a:active { color: red; }
+
+/* -----------------------
+Layout styles
+------------------------*/
+
+.container
+{
+	max-width: 50em;
+	margin: 0 auto;
+}
+
+.header
+{
+	color: #fff;
+	background: #555;
+	padding: 1em 1.25em;
+}
+
+.header-heading { margin: 0; }
+
+.nav-bar
+{
+	background: #000;
+	padding: 0;
+}
+
+.content
+{
+	padding: 1em 1.25em;
+	background-color: #fff;
+}
+.search
+{
+	display:block;
+}
+
+.footer
+{
+	color: #fff;
+	background: #000;
+	padding: 1em 1.25em;
+}
+
+/* -----------------------
+Nav
+------------------------*/
+
+.nav
+{
+	color:white;
+	margin: 0;
+	padding: 0;
+	list-style: none;
+}
+
+.nav li
+{
+	display: inline;
+}
+
+.nav a
+{
+	display: inline;
+	padding:0;
+	color: #fff;
+	text-decoration: none;
+	border-bottom: 1px solid gray;
+}
+
+.nav form
+{
+	display: inline;
+	padding: 0;
+	color: #fff;
+	text-decoration: none;
+	border-bottom: 1px solid gray;
+}
+
+.nav a:link { color: white; }
+.nav a:visited { color: white; }
+
+.nav a:focus
+{
+	color: black;
+	background-color: white;
+}
+
+.nav a:hover
+{
+	color: white;
+	background-color: green;
+}
+
+.nav a:active
+{
+	color: white;
+	background-color: red;
+}
+
+
+/* -----------------------
+Single styles
+------------------------*/
+
+.img-responsive { max-width: 100%; }
+
+.btn
+{
+	color: #fff !important;
+	background-color: royalblue;
+	border-color: #222;
+	display: inline-block;
+	padding: .5em 1em;
+	margin-bottom: 0;
+	font-weight: 400;
+	line-height: 1.2;
+	text-align: center;
+	white-space: nowrap;
+	vertical-align: middle;
+	cursor: pointer;
+	border: 1px solid transparent;
+	border-radius: .2em;
+	text-decoration: none;
+}
+
+.btn:hover
+{
+	color: #fff !important;
+	background-color: green;
+}
+
+.btn:focus
+{
+	color: #fff !important;
+	background-color: black;
+}
+
+.btn:active
+{
+	color: #fff !important;
+	background-color: red;
+}
+
+.table
+{
+	width: 100%;
+	max-width: 100%;
+	margin-bottom: 20px;
+}
+
+.list-unstyled
+{
+	padding-left: 0;
+	list-style: none;
+}
+
+.list-inline
+{
+	padding-left: 0;
+	margin-left: -5px;
+	list-style: none;
+}
+
+.list-inline > li
+{
+	display: inline-block;
+	padding-right: 5px;
+	padding-left: 5px;
+}
+
+/* -----------------------
+Wide styles
+------------------------*/
+
+@media (min-width: 42em)
+{
+	.header { padding: 1.5em 3em; }
+	.nav-bar { padding: 1em 3em; }
+	.content { padding: 2em 3em; }
+	.footer { padding: 2em 3em; }
+	
+	.nav li
+	{
+		display: inline;
+		margin: 0 1em 0 0;
+	}
+	
+	.nav a
+	{
+		display: inline;
+		padding: 0;
+		border-bottom: 0;
+	}
+}
+* { box-sizing:border-box; }
+textarea  { 
+	display: inline;
+	text-align:center;
+	padding-top:30px;
+	min-width:100px;
+	min-height:100px;   
+	max-width:100px;
+	max-height:100px;
+	font:15px 'Comic Sans MS', cursive; 
 	line-height:1.5;
-	border:0;
-	border-radius:3px;
 	background: -webkit-linear-gradient(#F9EFAF, #F7E98D);
 	background: -moz-linear-gradient(#F9EFAF, #F7E98D);
 	background: -o-linear-gradient(#F9EFAF, #F7E98D);
@@ -22,42 +282,54 @@ body { background:url(media/little_pluses.png) #cacaca; margin:30px; }
 	overflow:hidden;
 	transition:box-shadow 0.5s ease;
 	font-smoothing:subpixel-antialiased;
-	max-width:520px;
-	/*max-height:250px;*/
 }
-
-a:link{
-    	text-decoration: None;
-}
-
 
 textarea:hover { box-shadow:0 5px 8px rgba(0,0,0,0.15); }
 textarea:focus { box-shadow:0 5px 12px rgba(0,0,0,0.2); outline:none; }
 
-.rotatevertical{
-    font-size:0.6em;
-    width:0px;
-    height:0px;
-    margin-top:-25px;
-    margin-left:0px;
-    color:white;
-    -ms-transform:rotate(-45deg); /* IE 9 */
-    -moz-transform:rotate(-45deg); /* Firefox */
-    -webkit-transform:rotate(-45deg); /* Safari and Chrome */
-    -o-transform:rotate(-45deg); /* Opera */
-}
-
-/*https://css-tricks.com/examples/ShapesOfCSS/*/
-#base {
-  
-  	position:static;
-	width: 0px;
-	height: 0px;
-	float:left;
-	margin-left:-25px;
-	margin-right:25px;
-	margin-top:-40px;
-	border-style: solid;
-	border-width: 70px 70px 0 0;
-	border-color: #007bff transparent transparent transparent;
-}
+#tfheader{
+		background-color:#c3dfef;
+	}
+	#tfnewsearch{
+		float:right;
+		padding:20px;
+	}
+	.tftextinput{
+		margin: 0;
+		padding: 5px 15px;
+		font-family: Arial, Helvetica, sans-serif;
+		font-size:14px;
+		border:1px solid #0076a3; border-right:0px;
+		border-top-left-radius: 5px 5px;
+		border-bottom-left-radius: 5px 5px;
+	}
+	.tfbutton {
+		margin: 0;
+		padding: 5px 15px;
+		font-family: Arial, Helvetica, sans-serif;
+		font-size:14px;
+		outline: none;
+		cursor: pointer;
+		text-align: center;
+		text-decoration: none;
+		color: #ffffff;
+		border: solid 1px #0076a3; border-right:0px;
+		background: #0095cd;
+		background: -webkit-gradient(linear, left top, left bottom, from(#00adee), to(#0078a5));
+		background: -moz-linear-gradient(top,  #00adee,  #0078a5);
+		border-top-right-radius: 5px 5px;
+		border-bottom-right-radius: 5px 5px;
+	}
+	.tfbutton:hover {
+		text-decoration: none;
+		background: #007ead;
+		background: -webkit-gradient(linear, left top, left bottom, from(#0095cc), to(#00678e));
+		background: -moz-linear-gradient(top,  #0095cc,  #00678e);
+	}
+	/* Fixes submit button height problem in Firefox */
+	.tfbutton::-moz-focus-inner {
+	  border: 0;
+	}
+	.tfclear{
+		clear:both;
+	}

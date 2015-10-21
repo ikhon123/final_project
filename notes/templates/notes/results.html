@@ -15,22 +15,25 @@
 					{%if user.is_authenticated%}
                       <li><a href="/accounts/logout">Logout</a></li>
                     {% endif %}
-					<form method="get" action="/search/" class="navbar-form pull-right">
-						<input type="text" id="searchBox" class="input-medium search-query" name="q" placeholder="Search">
+					<li><form method="get" action="/search/">
+						<input type="text" id="searchBox"  name="q" placeholder="Search">
 						<input type="submit" class="btn" value="Search" >
-					</form>
+					</form></li>
+					
 				</ul>
 			</div>
 		</div>
 		<div class="content">
 			<div class="container">
 				<div class="main">
-					<div class="container">
-                        <h4>Title ---- {{object.title}}</h4> 
-                        <h4>Content ---- {{object.content}}</h4>
-                        <h4>Contact ---- {{object.contact}}</h4>
-                        <h4>Deposit ---- {{object.deposit}}</h4>
-        <a href={%url 'note_update' note.id %} class="btn btn-info" role="button">Edit</a>
-        <a href={%url 'note_delete' note.id %} class="btn btn-info" role="button">Delete</a>
-    </div>
+					<h3>Items related to: {{query}}</h3>
+					<hr>
+					{% if object_list  %}
+        				{% for note in object_list  %}
+				        <a href={%url 'detail' note.id %}><textarea>{{note.title}}</textarea></a>
+				        {% endfor %}
+				    {% else %}
+				        <p>No notes are available.</p>
+				    {% endif %}
+
     </body>

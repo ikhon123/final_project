@@ -6,7 +6,7 @@ from crispy_forms.layout import Submit, Layout, Hidden, Button, HTML, Div, Field
 class NoteForm(forms.ModelForm):
     class Meta: 
         model = Note
-        fields = ('title','content','due','done','color','fontcolor','folder','tag')
+        fields = ('title','content','contact','deposit','due','done','color','fontcolor','folder','tag')
         
     
     def __init__(self, *args, **kwargs):
@@ -36,7 +36,7 @@ class NoteForm(forms.ModelForm):
             self.cleaned_data['tag'] = []
             print("remove tag errors")
             del self._errors['tag']
-            
+
 class NoteFormUpdate(forms.ModelForm):
     class Meta: 
         model = Note

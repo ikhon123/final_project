@@ -7,6 +7,8 @@ class Note(models.Model):
     user = models.ForeignKey(UserProfile, blank=True, null=True)
     title = models.CharField(max_length=255)
     content = models.TextField(blank=True) #not a required field
+    deposit = models.CharField(max_length=255, blank=False, null=True)
+    contact = models.CharField(max_length=255, blank=False, null=True)
     due = models.DateTimeField(null=True, blank=True) #due datetime is optional
     created = models.DateTimeField(auto_now_add=True, auto_now=False, null=True)
     updated = models.DateTimeField(auto_now_add=False, auto_now=True, null=True)
@@ -17,6 +19,7 @@ class Note(models.Model):
     folder = models.ForeignKey('Folder', related_name= "notes", null=True, blank=True)
     #tag is optional
     tag = models.ManyToManyField('Tag', related_name='notes', null=True, blank=True)
+    
     
     def __str__(self):
         return self.title
@@ -40,3 +43,4 @@ class Tag(models.Model):
     
     def __str__(self):
         return self.title
+        

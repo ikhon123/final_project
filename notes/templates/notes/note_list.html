@@ -1,26 +1,39 @@
-{%extends 'notes/base.html'%}
 {%load staticfiles%}
+<link rel="stylesheet" type="text/css" href="{% static 'notes/style.css' %}" />
+    <body>
+		<div class="header">
+			<div class="container">
+				<h1 class="header-heading">reLease</h1>
+			</div>
+		</div>
+		<div class="nav-bar">
+			<div class="container">
+				<ul class="nav">
+				    <li><a href="https://final-project-ikhon123-1.c9.io/listall">Home</a></li>
+					<li><a href="https://final-project-ikhon123-1.c9.io/list">My Items</a></li>
+					<li><a href="https://final-project-ikhon123-1.c9.io/add">Add</a></li>
+					{%if user.is_authenticated%}
+                      <li><a href="/accounts/logout">Logout</a></li>
+                    {% endif %}
+					<form method="get" action="/search/">
+						<input type="text" id="searchBox"  name="q" placeholder="Search">
+						<input type="submit" class="btn" value="Search" >
+					</form>
+					
+				</ul>
+			</div>
+		</div>
+		<div class="content">
+			<div class="container">
+				<div class="main">
+					<h3>My Items</h3>
+					<hr>
+					{% if object_list  %}
+        				{% for note in object_list  %}
+				        <a href={%url 'detail' note.id %}><textarea>{{note.title}}</textarea></a>
+				        {% endfor %}
+				    {% else %}
+				        <p>No notes are available.</p>
+				    {% endif %}
 
-{%block content%}
-<div class="container">
-    <link rel="stylesheet" type="text/css" href="{% static 'notes/style.css' %}" />
-    {%if total%}
-        <h2>Total number of notes: {{total}}</h2>
-    {%endif%}
-    {% if object_list  %}
-        {% for note in object_list  %}
-            <a href={%url 'note_update' note.id %}>
-                <div class="postit" style="background:{{note.color}};color:{{note.fontcolor}}">
-                    <div id="base" style="border-color:{{note.folder.color}} transparent transparent transparent;"><div class="rotatevertical">{{note.folder.title}}</div></div>
-                    <br>
-                    <u>{{note.title}}</u>
-                    <br>
-                    {{note.content}}
-                </div>
-            </a>
-        {% endfor %}
-    {% else %}
-        <p>No notes are available.</p>
-    {% endif %}
-</div>
-{%endblock%}
+    </body>
