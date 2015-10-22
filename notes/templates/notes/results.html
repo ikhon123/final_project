@@ -15,10 +15,10 @@
 					{%if user.is_authenticated%}
                       <li><a href="/accounts/logout">Logout</a></li>
                     {% endif %}
-					<li><form method="get" action="/search/">
+					<form method="get" action="/search">
 						<input type="text" id="searchBox"  name="q" placeholder="Search">
 						<input type="submit" class="btn" value="Search" >
-					</form></li>
+					</form>
 					
 				</ul>
 			</div>
@@ -26,7 +26,7 @@
 		<div class="content">
 			<div class="container">
 				<div class="main">
-					<h3>Items related to: {{query}}</h3>
+					<h3>Items related to : {{query}}</h3>
 					<hr>
 					{% if object_list  %}
         				{% for note in object_list  %}

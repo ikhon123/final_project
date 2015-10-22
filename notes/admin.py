@@ -19,7 +19,7 @@ class FolderAdmin(admin.ModelAdmin):
 #https://docs.djangoproject.com/en/dev/ref/contrib/admin/#working-with-many-to-many-models
 class TaggedNoteInline(admin.TabularInline): 
     model = Note.tag.through
-    extra = 0
+    #extra = 0
     
 class TagAdmin(admin.ModelAdmin):
     inlines = [TaggedNoteInline,]

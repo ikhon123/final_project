@@ -6,7 +6,7 @@ from crispy_forms.layout import Submit, Layout, Hidden, Button, HTML, Div, Field
 class NoteForm(forms.ModelForm):
     class Meta: 
         model = Note
-        fields = ('title','content','contact','deposit','due','done','color','fontcolor','folder','tag')
+        fields = ('title','content','contact','deposit')
         
     
     def __init__(self, *args, **kwargs):
@@ -15,13 +15,14 @@ class NoteForm(forms.ModelForm):
         self.helper.form_id = "noteform"
         
         folder = Div('folder', css_class="col-xs-12", style="padding:0px;")
-        self.helper.layout.pop(6) 
-        self.helper.layout.insert(6,Fieldset("Select folder",folder, Button("createfoldermodal", value="Create New Folder", css_class="btn btn-primary btn-sm col-xs-12 ", data_toggle="modal", data_target="#myModal")))
+        #self.helper.layout.pop(6) 
+        #self.helper.layout.insert(6,Fieldset("Select folder",folder, Button("createfoldermodal", value="Create New Folder", css_class="btn btn-primary btn-sm col-xs-12 ", data_toggle="modal", data_target="#myModal")))
         
         
         tag = Div('tag',css_class = "col-xs-12", style="padding:0px;")
-        self.helper.layout.pop(7)
-        self.helper.layout.insert(7, Fieldset("Select Tag",tag, Button("createtagmodal", value="Create New Tag", css_class="btn btn-primary btn-sm col-xs-12", data_toggle="modal", data_target="#myModal2")))
+        #self.helper.layout.pop(7)
+        #self.helper.layout.pop()
+        #self.helper.layout.insert(7, Fieldset("Select Tag",tag, Button("createtagmodal", value="Create New Tag", css_class="btn btn-primary btn-sm col-xs-12", data_toggle="modal", data_target="#myModal2")))
         
         self.helper.layout.append(Button('btn_createnote', 'Create Note', css_class='createnote', style="margin-top:15px;"))
         self.helper.layout.append(Hidden(name='btn_createnote', value="btn_createnote"))
@@ -50,29 +51,3 @@ class NoteFormUpdate(forms.ModelForm):
         
         self.helper.add_input(Submit('submit', 'Update'))
 
-        
-class FolderForm(forms.ModelForm):
-    class Meta:
-        model = Folder
-        fields = '__all__'
-        
-    def __init__(self, *args, **kwargs):
-        super(FolderForm, self).__init__(*args, **kwargs)
-        self.helper = FormHelper(self)
-        self.helper.form_id = "folderform"
-        self.helper.layout.append(Hidden(name='btn_createfolder', value="btn_createfolder"))
-        self.helper.layout.append(Button('btn_createfolder', 'Create Folder', css_class='createfolder', data_dismiss="modal"))
-        
-
-class TagForm(forms.ModelForm):
-    class Meta:
-        model = Tag
-        fields = '__all__'
-        
-    def __init__(self, *args, **kwargs):
-        super(TagForm, self).__init__(*args, **kwargs)
-        self.helper = FormHelper(self)
-        self.helper.form_id = "tagform"
-        self.helper.layout.append(Hidden(name='btn_createtag', value="btn_createtag"))
-        self.helper.layout.append(Button('btn_createtag', 'Create Tag', css_class='createtag', data_dismiss="modal"))
-        
